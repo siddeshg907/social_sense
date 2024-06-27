@@ -69,7 +69,7 @@ function ChartSection_1({ data }) {
               <div className="ml-2">
                 <p className="text-lg font-medium text-gray-600">{card.title}</p>
                 <p className="text-3xl font-bold text-gray-800 mt-2">{card.value}</p>
-                <p className="text-sm font-semibold text-green-500 mt-1">{`Top ${card.percentile}%`}</p>
+                <p className="text-sm font-semibold text-green-500 mt-1">{`${card.percentile}%`}</p>
               </div>
             </div>
           </div>

@@ -20,8 +20,9 @@ function DashboardHome() {
     if (!mounted) return null; // Render nothing on the server
   return (
     <>
+     
+    <div className="min-h-screen grid gap-5 p-10 ">
     <Navbar/>
-    <div className="min-h-screen bg-gray-100 grid gap-5 p-10 ">
       <ChartSection_1 data={dashboardData} />
       <ChartSection_2 />
       <TransactionSection/>

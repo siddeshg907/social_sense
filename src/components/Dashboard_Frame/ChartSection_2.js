@@ -1,17 +1,27 @@
 import React from "react";
+import { Line } from "react-chartjs-2";
+import { ResponsivePie } from "@nivo/pie";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
   Legend,
-  ResponsiveContainer,
-} from "recharts";
-import { ResponsivePie } from "@nivo/pie";
-
+} from "chart.js";
 import customersData from "../../lib/customerData"; // Update the path as necessary
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function ChartSection_2() {
   // Prepare data for this year (2024)
@@ -53,6 +63,46 @@ function ChartSection_2() {
     { month: "Dec", customerCount: 30 },
   ];
 
+  const lineChartData = {
+    labels: thisYearData.map((data) => data.month),
+    datasets: [
+      {
+        label: "This Year",
+        data: thisYearData.map((data) => data.customerCount),
+        borderColor: "#FFD700",
+        backgroundColor: "#FFD700",
+        fill: false,
+        tension: 0.4,
+      },
+      {
+        label: "Last Year",
+        data: lastYearData.map((data) => data.customerCount),
+        borderColor: "#FFA500",
+        backgroundColor: "#FFA500",
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: false,
+        text: "Total Customers",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
   // Prepare data for age distribution
   const ageData = customersData.reduce((acc, customer) => {
     let ageGroup;
@@ -83,43 +133,21 @@ function ChartSection_2() {
   const COLORS = ["#FFD700", "#FFCC00", "#FFA500", "#FFFFFF"]; // Colors for age groups
 
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       {/* Line Chart */}
-      <div className="w-1/2 h-96 mr-4 bg-white rounded p-10">
-        <h2 className="font-bold text-xl mb-4">Total customers</h2>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={thisYearData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="customerCount"
-              name="This Year"
-              stroke="#8884d8"
-            />
-            <Line
-              type="monotone"
-              data={lastYearData}
-              dataKey="customerCount"
-              name="Last Year"
-              stroke="#FFCC00"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="w-full md:w-1/2 h-96  md:mr-4 bg-white rounded pl-8 pb-8 md:pb-16 shadow-xl">
+        <h2 className="font-bold text-xl mb-4">Total Customers</h2>
+        <div className="h-full">
+          <Line data={lineChartData} options={options} />
+        </div>
       </div>
 
       {/* Pie Chart */}
-      <div className="w-1/2 h-96 bg-white p-2 rounded">
+      <div className="w-full md:w-1/2 h-96 p-5 bg-white rounded pb-8 md:pb-16 shadow-md mb-10">
         <h2 className="font-bold text-xl mb-4">Customer Segmentations</h2>
         <ResponsivePie
           data={ageChartData}
-          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          margin={{ top: 20, right: 40, bottom: 0, left: 30 }}
           innerRadius={0.5}
           padAngle={0.7}
           cornerRadius={3}
@@ -127,9 +155,6 @@ function ChartSection_2() {
           borderWidth={1}
           borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
           enableRadialLabels={false}
-          radialLabelsSkipAngle={10}
-          radialLabelsTextColor="#333333"
-          radialLabelsLinkColor={{ from: "color" }}
           sliceLabelsSkipAngle={10}
           sliceLabelsTextColor="#333333"
           legends={[

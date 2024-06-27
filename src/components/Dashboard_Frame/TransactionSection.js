@@ -28,19 +28,20 @@ const TransactionSection = () => {
           transaction.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
           customer.name.toLowerCase().includes(searchTerm.toLowerCase()) || // Search by customer name
           transaction.amount.toString().toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (filter === '' || transaction.status.toLowerCase() === filter.toLowerCase()) // Apply filter by status
+        (filter === '' || filter === 'All' || transaction.status.toLowerCase() === filter.toLowerCase()) // Apply filter by status
     )
   );
 
   return (
     <div className="flex flex-col space-y-4">
       {/* Recent Transactions Header */}
-      <h2 className="text-lg font-bold text-gray-900 ">Recent Transactions</h2>
+      
 
       {/* Filter and Search Bar */}
-      <div className="flex justify-end items-center space-x-4">
+      <div className="flex justify-between items-center space-x-4">
+      <h2 className="text-lg font-bold text-gray-900">Recent Transactions</h2>
         <div className="flex items-center space-x-2">
-        <div className="relative">
+          <div className="relative">
             <button
               onClick={toggleFilterMenu}
               className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
@@ -52,22 +53,28 @@ const TransactionSection = () => {
               <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                 <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                   <button
-                    onClick={() => handleFilterChange('')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                    onClick={() => handleFilterChange('All')}
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left ${
+                      filter === 'All' ? 'font-semibold bg-gray-100' : ''
+                    }`}
                     role="menuitem"
                   >
                     All
                   </button>
                   <button
                     onClick={() => handleFilterChange('Paid')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left ${
+                      filter === 'Paid' ? 'font-semibold bg-gray-100' : ''
+                    }`}
                     role="menuitem"
                   >
                     Paid
                   </button>
                   <button
                     onClick={() => handleFilterChange('Pending')}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                    className={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left ${
+                      filter === 'Pending' ? 'font-semibold bg-gray-100' : ''
+                    }`}
                     role="menuitem"
                   >
                     Pending
@@ -83,7 +90,6 @@ const TransactionSection = () => {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          
         </div>
       </div>
 

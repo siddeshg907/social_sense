@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   FaUsers,
@@ -33,55 +32,52 @@ function ChartSection_1({ data }) {
     { month: "December", projection: 3500, actual: 3200 },
   ];
 
+  const cardData = [
+    {
+      icon: <FaUsers className="text-4xl text-yellow-600" />,
+      title: "Customers",
+      value: data.totalCustomers,
+      percentile: 85,
+    },
+    {
+      icon: <FaShoppingCart className="text-4xl text-yellow-600" />,
+      title: "Orders",
+      value: data.totalOrders,
+      percentile: 92,
+    },
+    {
+      icon: <FaCreditCard className="text-4xl text-yellow-600" />,
+      title: "Revenue",
+      value: `$${data.totalRevenue.toFixed(2)}`,
+      percentile: 78,
+    },
+    {
+      icon: <FaChartLine className="text-4xl text-yellow-600" />,
+      title: "Growth",
+      value: `${data.growth}%`,
+      percentile: 65,
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex items-center p-4 bg-white border rounded-lg shadow-md">
-          <div className="flex items-center">
-            <FaUsers className="text-2xl text-yellow-600" />
-            <div className="ml-4">
-              <p className="text-lg font-medium text-gray-600">Customers</p>
-              <p className="text-xl font-bold text-gray-800">
-                {data.totalCustomers}
-              </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-10">
+        {cardData.map((card, index) => (
+          <div key={index} className="flex items-center p-2 bg-white border rounded-lg shadow-md">
+            <div className="flex items-center">
+              {card.icon}
+              <div className="ml-2">
+                <p className="text-lg font-medium text-gray-600">{card.title}</p>
+                <p className="text-3xl font-bold text-gray-800 mt-2">{card.value}</p>
+                <p className="text-sm font-semibold text-green-500 mt-1">{`Top ${card.percentile}%`}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-center p-4 bg-white border rounded-lg shadow-md">
-          <div className="flex items-center">
-            <FaShoppingCart className="text-2xl text-yellow-600" />
-            <div className="ml-4">
-              <p className="text-lg font-medium text-gray-600">Orders</p>
-              <p className="text-xl font-bold text-gray-800">
-                {data.totalOrders}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center p-4 bg-white border rounded-lg shadow-md">
-          <div className="flex items-center">
-            <FaCreditCard className="text-2xl text-yellow-600" />
-            <div className="ml-4">
-              <p className="text-lg font-medium text-gray-600">Revenue</p>
-              <p className="text-xl font-bold text-gray-800">
-                ${data.totalRevenue.toFixed(2)}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center p-4 bg-white border rounded-lg shadow-md">
-          <div className="flex items-center">
-            <FaChartLine className="text-2xl text-yellow-600" />
-            <div className="ml-4">
-              <p className="text-lg font-medium text-gray-600">Growth</p>
-              <p className="text-xl font-bold text-gray-800">{data.growth}%</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
-      <div className="bg-white p-4 rounded">
+      <div className="bg-white p-4 rounded shadow-lg mb-5">
         <h2 className="font-bold text-xl mb-4">Projection vs Actuals</h2>
-        <div className="w-full h-full lg:h-96">
+        <div className="w-full h-64 md:h-96">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={barChartData}
@@ -89,21 +85,10 @@ function ChartSection_1({ data }) {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
-              <Bar
-                dataKey="actual"
-                stackId="stack"
-                fill="#FFCC00"
-                name="Actual"
-              />
-              <Bar
-                dataKey="projection"
-                stackId="stack"
-                fill="#e0e0e0"
-                name="Projection"
-              />
+              <Bar dataKey="actual" stackId="stack" fill="#FFCC00" name="Actual" />
+              <Bar dataKey="projection" stackId="stack" fill="#e0e0e0" name="Projection" />
               <XAxis dataKey="month" />
               <YAxis />
-
               <Legend />
             </BarChart>
           </ResponsiveContainer>
